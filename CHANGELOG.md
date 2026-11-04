@@ -1,10 +1,11 @@
 # Cambios
 
-## Sin publicar
+## 0.3.4 — 2026-11-03
 
 - Los textos de la aplicación pasan al castellano de España (tú en lugar de vos), igual que el README.
 - El menú **Ver** usa los mismos nombres que los botones: Leer, Ambas y Editar.
 - El README explica el aviso de Windows SmartScreen al abrir un ejecutable sin firma.
+- El README estrena portada.
 
 ## 0.3.3 — 2026-11-03
 

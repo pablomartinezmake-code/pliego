@@ -1,7 +1,7 @@
 {
   "name": "pliego",
   "productName": "Pliego",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": true,
   "description": "A local reading and writing desk with two independent document panes.",
   "main": "main.cjs",
