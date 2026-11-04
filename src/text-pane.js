@@ -24,10 +24,10 @@ const btn = (text, title, action) => {
 };
 
 export class TextPane {
-  constructor({ container, api, onDirty, onSaved, onClose, onReplace, onError } = {}) {
+  constructor({ container, api, onDirty, onSaved, onClose, onReplace, onError, onRender } = {}) {
     if (!container) throw new TypeError('TextPane necesita un contenedor.');
     this.container = container; this.api = api;
-    this.callbacks = { onDirty, onSaved, onClose, onReplace, onError };
+    this.callbacks = { onDirty, onSaved, onClose, onReplace, onError, onRender };
     this._doc = null; this.baseline = ''; this._dirty = false; this.destroyed = false;
     this.renderVersion = 0; this.searchHits = []; this.searchIndex = -1;
     this.root = el('section', 'text-reference-pane');
@@ -140,6 +140,7 @@ export class TextPane {
       img.loading = 'lazy';
     }
     if (!this.findBar.hidden) this.searchReading();
+    this.callbacks.onRender?.(this);
   }
 
   handleClick(event) {

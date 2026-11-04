@@ -12,6 +12,7 @@ import './pdf-pane.css';
 import './pdf-workspace.css';
 import './library.css';
 import { TextPane } from './text-pane.js';
+import { markChanges, clearChanges } from './compare-view.js';
 import './text-pane.css';
 import './text-workbench.css';
 import './add-menu.css';
@@ -30,7 +31,7 @@ Hay textos que piden otra velocidad. Una página despejada, una letra amable y e
 
 Elige **Leer** para ver la página limpia, **Ambas** para escribir junto a la vista previa o **Editar** para trabajar con el Markdown. Puedes hacer doble clic en un párrafo para pasar directamente a ese pasaje en el editor.
 
-Para leer dos archivos distintos a la vez, abre el primero y pulsa **Dos textos**, junto a **Abrir**, para elegir el segundo. Cada texto queda en su propio panel. También puedes usar **Ctrl + Alt + O** o **＋ → Abrir al lado…**.
+Para leer dos archivos distintos a la vez, abre el primero y pulsa **Dos textos**, junto a **Abrir**, para elegir el segundo. Cada texto queda en su propio panel, y Pliego marca lo que cambia entre ellos: en ocre, lo que solo está en el primero; en verde, lo que solo está en el segundo. También puedes usar **Ctrl + Alt + O** o **＋ → Abrir al lado…**.
 
 > Leer no es pasar los ojos por las palabras. A veces es detenerse donde el texto todavía está pensando.
 
@@ -69,6 +70,7 @@ let baseline = welcome, dirty = false, primaryDirty = false, mode = 'read', fold
 let findRanges = [], findIndex = -1, pendingChoice;
 let pdfWorkspace = null, favorites = [], fileType = 'all';
 let referencePane = null, referenceOpening = false, sidebarBeforeComparison = false;
+let changesOn = true, changeHunks = [], changeIndex = -1, changesTimer;
 let lastErrorMessage = '';
 const docType = () => current.type || 'md';
 const preferences = (() => { try { return JSON.parse(localStorage.getItem('pliego-reading') || '{}'); } catch { return {}; } })();
@@ -145,7 +147,34 @@ function render() {
   });
   if (!headings.length) { const note = document.createElement('p'); note.className = 'side-note'; note.textContent = 'Los títulos del texto aparecerán aquí.'; outline.append(note); }
   if (!$('find-bar').hidden) searchReading();
+  if (referencePane) refreshChanges();
   progress();
+}
+// Cotejo de los dos textos: marca lo que cambia y permite saltar de un pasaje a otro en ambos paneles.
+function refreshChanges() { clearTimeout(changesTimer); changesTimer = setTimeout(applyChanges, 200); }
+function applyChanges() {
+  clearChanges(); changeHunks = []; changeIndex = -1;
+  if (referencePane?.doc && changesOn && docType() !== 'pdf') changeHunks = markChanges($('preview'), referencePane.prose);
+  updateChangesUi();
+}
+function updateChangesUi() {
+  const n = changeHunks.length;
+  $('changes').hidden = !referencePane;
+  $('changes-toggle').setAttribute('aria-pressed', String(changesOn));
+  $('changes-count').textContent = !changesOn ? '' : !n ? 'Sin cambios' : changeIndex >= 0 ? `${changeIndex + 1} de ${n}` : `${n} ${n === 1 ? 'pasaje cambia' : 'pasajes cambian'}`;
+  $('changes-prev').disabled = $('changes-next').disabled = !changesOn || !n;
+}
+function bringIntoView(scroller, el) {
+  if (!scroller || !el) return;
+  const top = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop - scroller.clientHeight * 0.25;
+  scroller.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+function goChange(delta) {
+  const n = changeHunks.length; if (!n) return;
+  changeIndex = changeIndex < 0 ? (delta > 0 ? 0 : n - 1) : (changeIndex + delta + n) % n;
+  const hunk = changeHunks[changeIndex];
+  bringIntoView($('reader-pane'), hunk.first); bringIntoView(referencePane?.reader, hunk.second);
+  updateChangesUi();
 }
 function progress() {
   const pane = $('reader-pane'), available = pane.scrollHeight - pane.clientHeight;
@@ -258,6 +287,7 @@ async function saveAll() {
 function clearReference() {
   if (!referencePane) return;
   const pane = referencePane; referencePane = null; pane.destroy();
+  clearTimeout(changesTimer); clearChanges(); changeHunks = []; changeIndex = -1; updateChangesUi();
   $('text-reference').replaceChildren(); $('text-reference').hidden = true;
   $('text-workbench').classList.remove('text-comparing'); $('text-compare').textContent = 'Dos textos';
   $('text-compare').setAttribute('aria-pressed', 'false');
@@ -291,7 +321,7 @@ async function openReference(suppliedDoc = null) {
     document.body.classList.add('no-sidebar');
     referencePane = new TextPane({ container: $('text-reference'), api,
       onDirty: syncDirty, onSaved: () => { updateRecents(); syncDirty(); },
-      onClose: closeReference, onReplace: () => openReference(), onError: message => toast(String(message), true),
+      onClose: closeReference, onReplace: () => openReference(), onError: message => toast(String(message), true), onRender: refreshChanges,
     });
     await referencePane.load(doc);
     setMode('read'); document.querySelector('.mode-switch button[data-mode="split"]').hidden = true;
@@ -442,6 +472,8 @@ $('add-menu').addEventListener('keydown', event => {
 document.addEventListener('pointerdown', event => { if (!event.target.closest('.add-dropdown')) setAddMenu(false); });
 $('save-as').onclick = commands.saveAs;
 $('text-compare').onclick = commands['compare-text'];
+$('changes-toggle').onclick = () => { changesOn = !changesOn; applyChanges(); };
+$('changes-next').onclick = () => goChange(1); $('changes-prev').onclick = () => goChange(-1);
 document.querySelectorAll('.mode-switch button[data-mode]').forEach(button => button.onclick = () => setMode(button.dataset.mode));
 document.querySelectorAll('[data-format]').forEach(button => button.onclick = () => format(button.dataset.format));
 $('undo').onclick = () => { undo(view); view.focus(); }; $('redo').onclick = () => { redo(view); view.focus(); };

@@ -1,5 +1,11 @@
 # Cambios
 
+## 0.4.0 — 2026-11-03
+
+- **Ver qué cambió.** Al abrir dos textos, Pliego marca lo que cambia entre ellos: en ocre, lo que solo está en el primero; en verde, lo que solo está en el segundo. Empareja los párrafos y compara palabras dentro de cada pareja.
+- La barra del documento cuenta los pasajes que cambian; las flechas llevan los dos paneles a la vez al anterior o al siguiente. **Marcar cambios** apaga y enciende las marcas.
+- Las marcas se actualizan mientras se edita y no alteran el texto, la búsqueda ni el doble clic para editar.
+
 ## 0.3.4 — 2026-11-03
 
 - Los textos de la aplicación pasan al castellano de España (tú en lugar de vos), igual que el README.

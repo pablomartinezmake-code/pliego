@@ -4,3 +4,15 @@
 .file-actions .compare-action[aria-pressed=true]{box-shadow:inset 0 -2px var(--accent)}
 @media(max-width:1050px){.topbar{gap:8px}.brand{min-width:auto}.brand-caption{display:none}.file-actions #folder{display:none}.brand-mark{font-size:32px}.mode-switch button{min-width:48px;padding:6px}}
 @media(max-width:800px){.topbar{padding:0 10px;gap:6px}.brand{gap:8px;font-size:23px}.brand-mark{padding-right:6px}.file-actions .compare-action{padding:7px 9px}.view-actions{gap:0}}
+
+/* Cotejo: ocre = solo en el primer texto; verde = solo en el segundo. */
+::highlight(change-first){background-color:#c9a14f40;color:inherit}
+::highlight(change-second){background-color:#8aa77445;color:inherit;text-decoration:underline;text-decoration-color:#6f8a5f;text-decoration-thickness:1.5px}
+.changes{display:flex;align-items:center;gap:2px;margin-right:12px;font-size:12px}
+.changes[hidden]{display:none}
+#changes-toggle{border:1px solid var(--line);border-radius:5px;padding:4px 10px;font-size:12px;margin-right:6px}
+#changes-toggle[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent)}
+#changes-count{color:var(--muted);white-space:nowrap;margin-right:4px}
+#changes-prev,#changes-next{padding:2px 7px;font-size:14px}
+#changes-prev:disabled,#changes-next:disabled{opacity:.35}
+@media(max-width:900px){#changes-count{display:none}}

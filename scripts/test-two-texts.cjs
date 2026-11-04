@@ -51,6 +51,11 @@ async function run() {
     await page.waitForSelector('#text-reference [data-role=prose] h1');
     check('Open alongside from plus loads the second text using keyboard', await page.locator('#preview h1').textContent() === 'Primera versión' && await ref().locator('[data-role=prose] h1').textContent() === 'Segunda versión');
     check('each pane shows its own filename and path', await page.locator('#doc-name').textContent() === 'borrador.md' && await ref().locator('[data-role=title]').textContent() === 'version-dos.md' && (await ref().locator('[data-role=path]').textContent()).endsWith('version-dos.md'));
+    await page.waitForFunction(() => document.querySelector('#changes-count').textContent === '1 pasaje cambia');
+    const marks = await page.evaluate(() => ['change-first', 'change-second'].map(name => [...(CSS.highlights.get(name) || [])].map(range => range.toString())));
+    check('two texts mark only what changes: the title word on each side', JSON.stringify(marks) === JSON.stringify([['Primera'], ['Segunda']]));
+    await page.locator('#changes-next').click();
+    check('next change reports its position', await page.locator('#changes-count').textContent() === '1 de 1');
     await page.evaluate(() => { document.querySelector('#text-reference [data-role=reader]').scrollTop = 800; });
     await page.waitForFunction(() => document.querySelector('#text-reference [data-role=reader]').scrollTop > 0);
     check('reading scroll is independent in each pane', await page.evaluate(() => document.querySelector('#reader-pane').scrollTop === 0 && document.querySelector('#text-reference [data-role=reader]').scrollTop > 0));
@@ -65,6 +70,11 @@ async function run() {
     await page.waitForFunction(() => document.querySelector('#text-reference [data-role=dot]').hidden);
     const savedRight = await fs.readFile(right);
     check('Ctrl S saves only the focused right document', (await read(right)).includes('Retoque de la derecha.') && (await fs.readFile(left)).equals(originalLeft));
+    await page.waitForFunction(() => document.querySelector('#changes-count').textContent === '2 pasajes cambian');
+    check('editing a text updates the change count', true);
+    await page.locator('#changes-toggle').click();
+    check('Marcar cambios turns the marks off', await page.evaluate(() => !CSS.highlights.has('change-first') && document.querySelector('#changes-next').disabled));
+    await page.locator('#changes-toggle').click();
     check('right document preserves UTF-8 BOM and CRLF', savedRight.subarray(0, 3).equals(Buffer.from([0xef, 0xbb, 0xbf])) && savedRight.toString().includes('\r\nRetoque de la derecha.'));
     await page.locator('.mode-switch button[data-mode=edit]').click();
     check('each document switches read or edit independently', await page.locator('#main').getAttribute('data-mode') === 'edit' && await ref().locator('.text-reference-pane').getAttribute('data-mode') === 'edit');

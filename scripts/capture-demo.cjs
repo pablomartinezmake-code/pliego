@@ -14,6 +14,7 @@ async function main() {
   try {
     const page = await app.firstWindow();
     await page.waitForSelector('#text-reference [data-role=prose] h1');
+    await page.waitForFunction(() => document.querySelector('#changes-count')?.textContent.length > 0);
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setContentSize(1180, 780));
     // Omit local filesystem paths in the public demonstration screenshot.
     await page.addStyleTag({ content: '#doc-path,[data-role=path]{visibility:hidden!important}' });

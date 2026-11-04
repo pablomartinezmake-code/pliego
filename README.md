@@ -30,12 +30,19 @@ Cada panel tiene su propio desplazamiento y búsqueda. Los Markdown se pueden ed
 
 El modo **Ambas** muestra el Markdown y la vista previa del mismo archivo. Para ver dos archivos distintos se usa **Dos textos**.
 
+## Ver qué cambió
+
+Al abrir dos textos, Pliego los coteja y marca lo que cambia entre ellos: en ocre, lo que solo está en el primero; en verde, lo que solo está en el segundo. Lo común queda limpio. La barra del documento indica cuántos pasajes cambian, y las flechas **↑ ↓** llevan los dos paneles a la vez al pasaje anterior o siguiente. **Marcar cambios** apaga y enciende las marcas.
+
+El cotejo empareja primero los párrafos y después compara palabras dentro de cada pareja. Un párrafo que solo existe en un lado se marca entero. Se comparan palabras, no formato: pasar una frase a cursiva no cuenta como cambio. Las marcas se actualizan mientras editas.
+
 ## Qué puedes hacer
 
 - **Markdown:** leer, editar, buscar y guardar, con tablas, notas al pie y vista previa. Conserva UTF-8, BOM y los saltos de línea originales.
 - **PDF:** leer, seleccionar y buscar texto, consultar el índice, abrir otro PDF al lado y guardar notas, marcadores y resaltados en un cuaderno local.
 - **Word y texto plano:** abrir `.docx` y `.txt` en lectura. La vista de Word conserva contenido y estructura; la paginación puede cambiar.
 - **Biblioteca:** explorar carpetas, filtrar archivos por nombre o formato, guardar favoritos y volver a los recientes.
+- **Dos textos:** leer un borrador junto a su revisión, con lo que cambia marcado en cada lado.
 - **Lectura:** ajustar tamaño, ancho y tipografía; elegir papel, marfil o noche.
 
 ## Archivos y datos locales
@@ -48,7 +55,7 @@ No hay telemetría, IA, cuenta, servidor ni sincronización. Los enlaces web pid
 
 ## Límites de esta primera versión pública
 
-Pliego está disponible para **Windows x64**. PDF, Word y TXT se abren para lectura; solo Markdown se edita. No incluye OCR, PDF con contraseña, edición visual de Word, comparación automática de diferencias ni fusión de versiones.
+Pliego está disponible para **Windows x64**. PDF, Word y TXT se abren para lectura; solo Markdown se edita. No incluye OCR, PDF con contraseña, edición visual de Word ni fusión de versiones: Pliego marca lo que cambia, pero no pasa cambios de un texto a otro.
 
 Los PDF admiten hasta 200 MiB y búsqueda de texto en las primeras 3.000 hojas. La biblioteca limita el inventario a 5.000 documentos o 20.000 entradas e informa si queda parcial.
 
