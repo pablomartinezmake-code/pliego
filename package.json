@@ -1,0 +1,50 @@
+{
+  "name": "pliego",
+  "productName": "Pliego",
+  "version": "0.3.3",
+  "private": true,
+  "description": "A local reading and writing desk with two independent document panes.",
+  "main": "main.cjs",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "npm run build && electron .",
+    "test": "node --test tests/*.test.cjs",
+    "package": "npm run build && node scripts/package.mjs",
+    "test:ui": "node scripts/test-ui.cjs",
+    "test:library": "node scripts/test-library.cjs",
+    "test:two-texts": "node scripts/test-two-texts.cjs",
+    "test:packaged": "node scripts/test-two-texts.cjs --packaged && node scripts/test-library.cjs --packaged",
+    "demo:screenshot": "node scripts/capture-demo.cjs"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-markdown": "^6.5.2",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/search": "^6.7.2",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "codemirror": "^6.0.2",
+    "dompurify": "^3.4.17",
+    "mammoth": "^1.13.0",
+    "marked": "^18.1.2",
+    "marked-footnote": "^1.4.0",
+    "pdfjs-dist": "^6.4.299"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "^45.1.0",
+    "esbuild": "^0.28.2",
+    "jszip": "^3.10.2",
+    "playwright": "^1.64.1"
+  },
+  "author": "Pablo Martinez Samper",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pablomartinezmake-code/pliego.git"
+  },
+  "homepage": "https://github.com/pablomartinezmake-code/pliego#readme",
+  "bugs": {
+    "url": "https://github.com/pablomartinezmake-code/pliego/issues"
+  }
+}
