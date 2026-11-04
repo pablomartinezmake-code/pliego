@@ -1,6 +1,4 @@
-# Pliego
-
-**Dos textos abiertos. Una mesa de trabajo.**
+![Pliego. Dos textos abiertos, una mesa de trabajo: un borrador y su revisión, uno a cada lado del doblez de un pliego.](docs/images/portada.png)
 
 Pliego es una aplicación libre para Windows que permite leer dos documentos en una misma ventana, cada uno con su desplazamiento, búsqueda y controles. Nació de una necesidad sencilla: trabajar con un borrador y su revisión sin estar colocando ventanas una y otra vez.
 
