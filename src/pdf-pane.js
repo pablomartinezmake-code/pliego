@@ -62,12 +62,12 @@ export class PdfPane {
         <select data-role="zoom" aria-label="Zoom"></select>
         <button type="button" data-action="fit" title="Ajustar al ancho" aria-label="Ajustar al ancho">↔</button>
         <label class="pdf-search-label"><input data-role="search" type="search" placeholder="Buscar en el PDF" aria-label="Buscar en el PDF"><button type="button" data-action="search-next" title="Siguiente resultado" aria-label="Siguiente resultado">⌕</button></label>
-        <span class="pdf-status" data-role="status" aria-live="polite">Abrí un PDF para empezar.</span>
+        <span class="pdf-status" data-role="status" aria-live="polite">Abre un PDF para empezar.</span>
       </div>
       <div class="pdf-viewport" data-role="viewport" tabindex="0" aria-label="Página del PDF">
         <div class="pdf-page-stack" data-role="stack"></div>
       </div>
-      <div class="pdf-selection-note" data-role="selection-note">Seleccioná texto para crear una nota.</div>`;
+      <div class="pdf-selection-note" data-role="selection-note">Selecciona texto para crear una nota.</div>`;
     this.container.replaceChildren(this.root);
     this.viewport = this.root.querySelector('[data-role="viewport"]');
     this.stack = this.root.querySelector('[data-role="stack"]');
@@ -277,7 +277,7 @@ export class PdfPane {
       this.renderHighlights(highlightLayer);
       pageWrap.dataset.rendered = 'true';
       if (!textContent.items?.some(item => typeof item.str === 'string' && item.str.trim())) {
-        this.setStatus(this.withSearchStatus('Esta hoja no tiene texto seleccionable; podés crear una nota de página.'));
+        this.setStatus(this.withSearchStatus('Esta hoja no tiene texto seleccionable; puedes crear una nota de página.'));
       } else {
         this.setStatus(this.withSearchStatus('El texto del PDF es seleccionable; las notas se guardan aparte.'));
       }
@@ -346,7 +346,7 @@ export class PdfPane {
   clearSelection() {
     this.lastSelection = null;
     window.getSelection()?.removeAllRanges();
-    this.selectionNote.textContent = 'Seleccioná texto para crear una nota.';
+    this.selectionNote.textContent = 'Selecciona texto para crear una nota.';
     this.callbacks.onSelection?.(null);
   }
 

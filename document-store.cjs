@@ -37,7 +37,7 @@ class DocumentStore {
     const a = path.resolve(p), key = keyOf(a);
     const recent = allowRecent && (this.fileStore.getRecent().some(x => keyOf(x.path) === key) || this.recent.some(x => keyOf(x.path) === key));
     const folder = allowFolder && [...this.folderRoots].some(root => { const r = path.relative(root, a); return r !== '' && !r.startsWith('..') && !path.isAbsolute(r); });
-    if (!this.authorized.has(key) && !recent && !folder && !this.favorites.some(x => x.path && keyOf(x.path) === key)) throw new Error('Primero abrí el archivo, seleccioná su carpeta o guardalo como favorito desde Pliego.');
+    if (!this.authorized.has(key) && !recent && !folder && !this.favorites.some(x => x.path && keyOf(x.path) === key)) throw new Error('Primero abre el archivo, selecciona su carpeta o guárdalo como favorito desde Pliego.');
     const st = await fsp.lstat(a);
     if (st.isSymbolicLink() || !st.isFile()) throw new Error('No se admiten enlaces simbólicos ni archivos especiales.');
     if (keyOf(await fsp.realpath(a)) !== key) throw new Error('La ruta resuelve fuera del archivo autorizado.');

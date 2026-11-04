@@ -24,13 +24,13 @@ const welcome = `# Un lugar para leer.
 
 Hay textos que piden otra velocidad. Una página despejada, una letra amable y el espacio justo para seguir una idea hasta el final.
 
-**Pliego** es un pequeño escritorio para tus documentos. Abrí un Markdown, un PDF, un Word o un texto plano. Acomodate y empezá a leer. Si una frase del Markdown pide un retoque, la edición está a un clic.
+**Pliego** es un pequeño escritorio para tus documentos. Abre un Markdown, un PDF, un Word o un texto plano. Acomódate y empieza a leer. Si una frase del Markdown pide un retoque, la edición está a un clic.
 
 ## El texto, en primer plano
 
-Elegí **Leer** para ver la página limpia, **Ambas** para escribir junto a la vista previa o **Editar** para trabajar con el Markdown. Podés hacer doble clic en un párrafo para pasar directamente a ese pasaje en el editor.
+Elige **Leer** para ver la página limpia, **Ambas** para escribir junto a la vista previa o **Editar** para trabajar con el Markdown. Puedes hacer doble clic en un párrafo para pasar directamente a ese pasaje en el editor.
 
-Para leer dos archivos distintos a la vez, abrí el primero y pulsá **Dos textos**, junto a **Abrir**, para elegir el segundo. Cada texto queda en su propio panel. También podés usar **Ctrl + Alt + O** o **＋ → Abrir al lado…**.
+Para leer dos archivos distintos a la vez, abre el primero y pulsa **Dos textos**, junto a **Abrir**, para elegir el segundo. Cada texto queda en su propio panel. También puedes usar **Ctrl + Alt + O** o **＋ → Abrir al lado…**.
 
 > Leer no es pasar los ojos por las palabras. A veces es detenerse donde el texto todavía está pensando.
 
@@ -38,22 +38,22 @@ El botón **Aa** te deja cambiar el tamaño de letra, el ancho de la página y e
 
 ## Retoques sin ceremonia
 
-La barra de edición tiene lo necesario: títulos, **negritas**, *cursivas*, citas, listas y enlaces. También podés escribir la sintaxis de Markdown directamente.
+La barra de edición tiene lo necesario: títulos, **negritas**, *cursivas*, citas, listas y enlaces. También puedes escribir la sintaxis de Markdown directamente.
 
-- Abrí un archivo con **Ctrl + O** o arrastralo a la ventana.
-- Guardá los cambios con **Ctrl + S**.
-- Buscá una frase con **Ctrl + F**.
-- Activá la lectura sin distracciones con **Ctrl + Mayús + F**.
+- Abre un archivo con **Ctrl + O** o arrástralo a la ventana.
+- Guarda los cambios con **Ctrl + S**.
+- Busca una frase con **Ctrl + F**.
+- Activa la lectura sin distracciones con **Ctrl + Mayús + F**.
 
-Los cambios se guardan cuando vos lo indicás. Si cerrás una página con cambios pendientes, Pliego te avisa. Antes de sobrescribir un archivo, conserva una copia de su versión anterior.
+Los cambios se guardan cuando tú lo indicas. Si cierras una página con cambios pendientes, Pliego te avisa. Antes de sobrescribir un archivo, conserva una copia de su versión anterior.
 
 ## Cada archivo, en su sitio
 
-Abrí una **carpeta** para recorrer sus archivos desde el panel lateral. El **índice** se arma a partir de los títulos del documento y te lleva directo a cada sección.
+Abre una **carpeta** para recorrer sus archivos desde el panel lateral. El **índice** se genera a partir de los títulos del documento y te lleva directamente a cada sección.
 
-La **Biblioteca** te deja buscar por nombre o carpeta, filtrar por formato y guardar favoritos. Los PDF tienen su propio **cuaderno**: notas, marcadores con nombre y pasajes seleccionados. Podés leer dos PDF enfrentados y exportar tus fichas a Markdown. La hoja del PDF y el folio impreso se guardan por separado; el folio lo leés en la imagen de esa misma hoja.
+La **Biblioteca** te deja buscar por nombre o carpeta, filtrar por formato y guardar favoritos. Los PDF tienen su propio **cuaderno**: notas, marcadores con nombre y pasajes seleccionados. Puedes leer dos PDF enfrentados y exportar tus fichas a Markdown. La hoja del PDF y el folio impreso se guardan por separado; el folio lo lees en la imagen de esa misma hoja.
 
-| Para hacer esto | Usá esto |
+| Para hacer esto | Usa esto |
 | --- | --- |
 | Leer con calma | Leer + Aa |
 | Corregir viendo el resultado | Ambas |
@@ -62,7 +62,7 @@ La **Biblioteca** te deja buscar por nombre o carpeta, filtrar por formato y gua
 
 ---
 
-Esta página es una bienvenida. Podés editarla y guardarla como tu primer archivo, o abrir uno de los tuyos.
+Esta página es una bienvenida. Puedes editarla y guardarla como tu primer archivo, o abrir uno de los tuyos.
 `;
 let current = { path: null, name: 'Bienvenido a Pliego', text: welcome, revision: null, eol: '\n', bom: false };
 let baseline = welcome, dirty = false, primaryDirty = false, mode = 'read', folder = null, renderTimer, toastTimer, saving = false, transitioning = false;
@@ -143,7 +143,7 @@ function render() {
     };
     outline.append(button);
   });
-  if (!headings.length) { const note = document.createElement('p'); note.className = 'side-note'; note.textContent = 'Los títulos del texto aparecerán acá.'; outline.append(note); }
+  if (!headings.length) { const note = document.createElement('p'); note.className = 'side-note'; note.textContent = 'Los títulos del texto aparecerán aquí.'; outline.append(note); }
   if (!$('find-bar').hidden) searchReading();
   progress();
 }
@@ -169,7 +169,7 @@ function jumpTo(position) {
   const pos = Math.min(position, view.state.doc.length);
   view.dispatch({ selection: { anchor: pos }, effects: EditorView.scrollIntoView(pos, { y: 'center' }) }); view.focus();
 }
-function chooseUnsaved(message = 'Guardá los cambios antes de pasar a otro documento.') {
+function chooseUnsaved(message = 'Guarda los cambios antes de pasar a otro documento.') {
   if ($('unsaved-dialog').open) return Promise.resolve('cancel');
   $('unsaved-message').textContent = message;
   $('unsaved-dialog').showModal();
@@ -211,7 +211,7 @@ async function replaceDocument(doc) {
       onOutline: items => {
         $('outline').replaceChildren();
         for (const item of items) { const button = document.createElement('button'); button.className = `outline-item depth-${Math.min(6, item.depth + 1)}`; button.textContent = item.title; button.onclick = item.go; $('outline').append(button); }
-        if (!items.length) { const p = document.createElement('p'); p.className = 'side-note'; p.textContent = 'Este PDF no tiene un índice de navegación. Podés usar las hojas o tus marcadores.'; $('outline').append(p); }
+        if (!items.length) { const p = document.createElement('p'); p.className = 'side-note'; p.textContent = 'Este PDF no tiene un índice de navegación. Puedes usar las hojas o tus marcadores.'; $('outline').append(p); }
       },
     });
     setDirty(false); await pdfWorkspace.load(doc);
@@ -267,7 +267,7 @@ function clearReference() {
 }
 async function referenceMayLeave() {
   if (!referencePane?.dirty) return true;
-  const choice = await chooseUnsaved('El segundo texto tiene cambios pendientes. Guardalo antes de cerrar o reemplazar su panel.');
+  const choice = await chooseUnsaved('El segundo texto tiene cambios pendientes. Guárdalo antes de cerrar o reemplazar su panel.');
   if (choice === 'save') return await referencePane.save();
   return choice === 'discard';
 }
@@ -282,8 +282,8 @@ async function openReference(suppliedDoc = null) {
     if (!(await referenceMayLeave())) return;
     const doc = suppliedDoc || await api.openFile({ type: 'text' });
     if (!doc) return;
-    if (!['md', 'txt', 'docx'].includes(doc.type || 'md')) { toast('Elegí un Markdown, Word o texto plano para el segundo panel.'); return; }
-    if (current.path && samePath(current.path, doc.path)) { toast('Ese archivo ya está abierto a la izquierda. Elegí la otra versión del texto.'); return; }
+    if (!['md', 'txt', 'docx'].includes(doc.type || 'md')) { toast('Elige un Markdown, Word o texto plano para el segundo panel.'); return; }
+    if (current.path && samePath(current.path, doc.path)) { toast('Ese archivo ya está abierto a la izquierda. Elige la otra versión del texto.'); return; }
     const wasOpen = Boolean(referencePane);
     referencePane?.destroy(); referencePane = null;
     if (!wasOpen) sidebarBeforeComparison = document.body.classList.contains('no-sidebar');
@@ -335,7 +335,7 @@ function renderFiles() {
     button.onclick = () => transition(() => api.readFile(file.path)); $('files').append(button);
   }
   if (!$('files').children.length) { const p = document.createElement('p'); p.className = 'side-note'; p.textContent = 'No hay documentos que coincidan con este filtro.'; $('files').append(p); }
-  $('library-count').textContent = `${matches.length} de ${folder.files.length} documentos${folder.truncated ? ' · inventario parcial, elegí una carpeta más pequeña' : ''}${folder.warning ? ' · algunas carpetas no pudieron leerse' : ''}`;
+  $('library-count').textContent = `${matches.length} de ${folder.files.length} documentos${folder.truncated ? ' · inventario parcial, elige una carpeta más pequeña' : ''}${folder.warning ? ' · algunas carpetas no pudieron leerse' : ''}`;
 }
 function showFolder(result) { folder = result; $('folder-label').textContent = result.path.split(/[\\/]/).pop(); $('folder-label').title = result.path; renderFiles(); updateFavoriteButtons(); sideTab(true); document.body.classList.remove('no-sidebar'); }
 async function openFolder() {
@@ -359,7 +359,7 @@ async function updateFavorites() {
     remove.onclick = () => safely(async () => { await api.toggleFavorite(favorite); await updateFavorites(); });
     row.append(button, remove); $('favorites').append(row);
   }
-  if (!favorites.length) { const note = document.createElement('p'); note.className = 'side-note'; note.style.padding = '0'; note.textContent = 'Marcá con ☆ una carpeta o un documento.'; $('favorites').append(note); }
+  if (!favorites.length) { const note = document.createElement('p'); note.className = 'side-note'; note.style.padding = '0'; note.textContent = 'Marca con ☆ una carpeta o un documento.'; $('favorites').append(note); }
   updateFavoriteButtons();
 }
 function format(kind) {
@@ -463,7 +463,7 @@ $('preview').onclick = event => {
     const target = [...$('preview').querySelectorAll('[id]')].find(el => el.id === slug || el.id === href.slice(1) || el.textContent.toLocaleLowerCase('es').replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s+/g, '-') === slug);
     target?.scrollIntoView({ block: 'start' });
   } else if (/^https?:\/\//i.test(href)) safely(() => api?.openExternal(href));
-  else toast('Para abrir otro documento, usá Abrir o el panel de archivos.');
+  else toast('Para abrir otro documento, usa Abrir o el panel de archivos.');
 };
 $('reader-pane').addEventListener('scroll', progress, { passive: true });
 $('find-toggle').onclick = find; $('find-input').oninput = searchReading;
@@ -506,7 +506,7 @@ document.addEventListener('drop', event => {
   event.preventDefault();
   const file = event.dataTransfer.files[0];
   if (file && api?.openDroppedFile) transition(() => api.openDroppedFile(file));
-  else if (file) toast('Abrí este archivo con Ctrl + O.');
+  else if (file) toast('Abre este archivo con Ctrl + O.');
 });
 api?.onCommand(command => commands[command]?.());
 api?.onOpenDocument(doc => transition(async () => doc));

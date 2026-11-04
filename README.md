@@ -14,7 +14,9 @@ Funciona en tu equipo, sin cuenta ni servicios externos. Los documentos siguen s
 2. Descomprime la carpeta completa en una ubicación donde puedas escribir.
 3. Abre **Pliego.exe**. No necesitas Node.js para usarlo.
 
-Conserva todos los archivos de la carpeta. El ejecutable todavía no tiene firma digital.
+Conserva todos los archivos de la carpeta.
+
+**Windows puede avisar al abrirlo.** El ejecutable todavía no tiene firma digital, así que Windows no sabe quién lo ha publicado y puede mostrar una ventana azul de SmartScreen diciendo que ha protegido el equipo. Para abrirlo, pulsa **Más información** y después **Ejecutar de todas formas**.
 
 El ZIP también incluye un instalador opcional **Install-Pliego.ps1**, que coloca Pliego en una ruta estable de tu usuario y crea accesos en Escritorio e Inicio. Cierra Pliego antes de instalar o actualizar. La instalación conserva los documentos y los datos de lectura locales.
 

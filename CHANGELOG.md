@@ -1,5 +1,11 @@
 # Cambios
 
+## Sin publicar
+
+- Los textos de la aplicación pasan al castellano de España (tú en lugar de vos), igual que el README.
+- El menú **Ver** usa los mismos nombres que los botones: Leer, Ambas y Editar.
+- El README explica el aviso de Windows SmartScreen al abrir un ejecutable sin firma.
+
 ## 0.3.3 — 2026-11-03
 
 Primera distribución pública de Pliego para Windows x64, bajo licencia MIT.

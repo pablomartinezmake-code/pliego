@@ -8,9 +8,9 @@ export class PdfWorkspace {
     this.notebook = { version: 0, entries: [] }; this.selection = null; this.editId = null; this.saving = false; this.draftDirty = false; this.loadToken = 0;
     container.innerHTML = `<div class="pdf-desk-toolbar"><span class="eyebrow">LECTURA PDF</span><span class="pdf-original-label">Original intacto · notas en tu cuaderno</span><button id="pdf-compare">Dos documentos</button><button id="pdf-notes-toggle" aria-pressed="true">Cuaderno</button><button id="pdf-export">Exportar fichas…</button></div>
       <div class="pdf-desk-body"><div class="pdf-readers"><section class="pdf-primary"><div class="pdf-document-label" id="pdf-primary-name"></div><div class="pdf-primary-view"></div></section><section class="pdf-secondary" hidden><div class="pdf-document-label"><span id="pdf-secondary-name"></span><button id="pdf-compare-close" aria-label="Cerrar documento de referencia">×</button></div><div class="pdf-secondary-view"></div></section></div>
-      <aside class="pdf-notebook" aria-label="Cuaderno de lectura"><div class="notebook-heading"><h2>Cuaderno</h2><span id="notebook-count"></span></div><p class="notebook-hint">Seleccioná un pasaje del documento principal para citarlo, o anotá la hoja que estás leyendo.</p>
+      <aside class="pdf-notebook" aria-label="Cuaderno de lectura"><div class="notebook-heading"><h2>Cuaderno</h2><span id="notebook-count"></span></div><p class="notebook-hint">Selecciona un pasaje del documento principal para citarlo, o anota la hoja que estás leyendo.</p>
       <div class="notebook-actions"><button id="pdf-new-note">＋ Nota de hoja</button><button id="pdf-new-bookmark">☆ Marcador</button></div>
-      <form id="pdf-note-form" hidden><div class="note-location" id="pdf-note-location"></div><label for="pdf-note-title">Título</label><input id="pdf-note-title" maxlength="300" placeholder="Una idea para volver"><label for="pdf-note-quote">Pasaje seleccionado</label><textarea id="pdf-note-quote" rows="3" readonly placeholder="Nota de hoja, sin cita textual"></textarea><p class="quote-caution">El texto extraído puede contener errores. Cotejalo con la imagen antes de citar.</p><label for="pdf-note-folio">Folio impreso <span>opcional, leído en esta hoja</span></label><input id="pdf-note-folio" maxlength="100" placeholder="Sin verificar"><label for="pdf-note-comment">Tu nota</label><textarea id="pdf-note-comment" rows="4" maxlength="20000" placeholder="¿Qué querés conservar de esta lectura?"></textarea><div class="note-form-actions"><button type="button" id="pdf-note-cancel">Cancelar</button><button type="submit" id="pdf-note-save" class="save">Guardar nota</button></div></form>
+      <form id="pdf-note-form" hidden><div class="note-location" id="pdf-note-location"></div><label for="pdf-note-title">Título</label><input id="pdf-note-title" maxlength="300" placeholder="Una idea para volver"><label for="pdf-note-quote">Pasaje seleccionado</label><textarea id="pdf-note-quote" rows="3" readonly placeholder="Nota de hoja, sin cita textual"></textarea><p class="quote-caution">El texto extraído puede contener errores. Cotéjalo con la imagen antes de citar.</p><label for="pdf-note-folio">Folio impreso <span>opcional, leído en esta hoja</span></label><input id="pdf-note-folio" maxlength="100" placeholder="Sin verificar"><label for="pdf-note-comment">Tu nota</label><textarea id="pdf-note-comment" rows="4" maxlength="20000" placeholder="¿Qué quieres conservar de esta lectura?"></textarea><div class="note-form-actions"><button type="button" id="pdf-note-cancel">Cancelar</button><button type="submit" id="pdf-note-save" class="save">Guardar nota</button></div></form>
       <form id="pdf-bookmark-form" hidden><label for="pdf-bookmark-name">Nombre del marcador</label><input id="pdf-bookmark-name" maxlength="300" placeholder="Volver a esta hoja"><div class="note-form-actions"><button type="button" id="pdf-bookmark-cancel">Cancelar</button><button type="submit" class="save">Guardar marcador</button></div></form>
       <div id="notebook-entries"></div><p class="notebook-storage">Guardado local. Las notas quedan vinculadas a esta versión del PDF.</p></aside></div>`;
     this.q = selector => container.querySelector(selector);
@@ -49,12 +49,12 @@ export class PdfWorkspace {
   }
   offerSelection(selection) {
     if (this.draftDirty) return;
-    if (selection.quote.length > 10000 || selection.rects.length > 100) { this.onError?.('Elegí un pasaje más breve para la ficha (hasta 10.000 caracteres y 100 líneas).'); return; }
+    if (selection.quote.length > 10000 || selection.rects.length > 100) { this.onError?.('Elige un pasaje más breve para la ficha (hasta 10.000 caracteres y 100 líneas).'); return; }
     this.selection = selection;
     this.startNote(selection);
   }
   startNote(selection = null, entry = null) {
-    if (this.draftDirty && !entry) { this.onError?.('Guardá o cancelá la nota que estás escribiendo antes de empezar otra.'); return; }
+    if (this.draftDirty && !entry) { this.onError?.('Guarda o cancela la nota que estás escribiendo antes de empezar otra.'); return; }
     this.q('.pdf-notebook').classList.remove('notebook-hidden'); this.q('#pdf-notes-toggle').setAttribute('aria-pressed', 'true');
     this.q('#pdf-note-form').hidden = false; this.q('#pdf-bookmark-form').hidden = true;
     this.editId = entry?.id || null; this.draftType = 'note'; this.draftPage = entry?.page || selection?.page || this.primary.page || 1;
@@ -67,7 +67,7 @@ export class PdfWorkspace {
     if (!selection) this.q('#pdf-note-title').focus();
   }
   startBookmark(entry = null) {
-    if (this.draftDirty) { this.onError?.('Guardá o cancelá la nota pendiente antes de crear un marcador.'); return; }
+    if (this.draftDirty) { this.onError?.('Guarda o cancela la nota pendiente antes de crear un marcador.'); return; }
     this.q('#pdf-note-form').hidden = true; this.q('#pdf-bookmark-form').hidden = false;
     this.draftType = 'bookmark'; this.editId = entry?.id || null; this.draftPage = entry?.page || this.primary.page || 1;
     this.q('#pdf-bookmark-name').value = entry?.title || `Hoja ${this.draftPage}`;
@@ -101,7 +101,7 @@ export class PdfWorkspace {
   renderEntries() {
     const list = this.q('#notebook-entries'); list.replaceChildren();
     this.q('#notebook-count').textContent = `${this.notebook.entries.length}`;
-    if (!this.notebook.entries.length) { list.append(el('p', 'notebook-empty', 'Una lectura empieza sin marcas. Guardá acá los lugares a los que quieras volver.')); return; }
+    if (!this.notebook.entries.length) { list.append(el('p', 'notebook-empty', 'Una lectura empieza sin marcas. Guarda aquí los lugares a los que quieras volver.')); return; }
     for (const entry of [...this.notebook.entries].sort((a, b) => a.page - b.page || a.createdAt.localeCompare(b.createdAt))) {
       const card = el('section', 'notebook-entry'); card.dataset.entryId = entry.id;
       const location = el('button', 'entry-location', `${entry.type === 'bookmark' ? '☆ ' : ''}Hoja PDF ${entry.page}${entry.folio ? ` · folio ${entry.folio}` : ''}`);
@@ -110,11 +110,11 @@ export class PdfWorkspace {
       if (entry.note) card.append(el('p', 'entry-comment', entry.note));
       const actions = el('div', 'entry-actions');
       const edit = el('button', '', 'Editar'); edit.onclick = () => {
-        if (this.draftDirty) { this.onError?.('Guardá o cancelá la nota pendiente.'); return; }
+        if (this.draftDirty) { this.onError?.('Guarda o cancela la nota pendiente.'); return; }
         if (entry.type === 'bookmark') this.startBookmark(entry); else this.startNote(null, entry);
       };
       const remove = el('button', '', 'Eliminar'); remove.onclick = async () => {
-        if (this.draftDirty) { this.onError?.('Guardá o cancelá la nota pendiente antes de eliminar otra.'); return; }
+        if (this.draftDirty) { this.onError?.('Guarda o cancela la nota pendiente antes de eliminar otra.'); return; }
         if (!confirm(`¿Eliminar «${entry.title}» del cuaderno?`)) return;
         try { this.notebook = await this.api.saveNotebook({ path: this.doc.path, revision: this.doc.revision, expectedVersion: this.notebook.version, entries: this.notebook.entries.filter(item => item.id !== entry.id) }); this.renderEntries(); this.primary.setHighlights(this.notebook.entries); } catch (error) { this.onError?.(error.message); }
       };
@@ -124,7 +124,7 @@ export class PdfWorkspace {
   async compare() {
     try {
       const doc = await this.api.openFile({ type: 'pdf' }); if (!doc) return;
-      if (doc.type !== 'pdf') throw new Error('Elegí un PDF como documento de referencia.');
+      if (doc.type !== 'pdf') throw new Error('Elige un PDF como documento de referencia.');
       this.closeCompare(); this.q('.pdf-secondary').hidden = false; this.q('.pdf-readers').classList.add('comparing');
       this.notesBeforeCompare = !this.q('.pdf-notebook').classList.contains('notebook-hidden');
       this.q('.pdf-notebook').classList.add('notebook-hidden'); this.q('#pdf-notes-toggle').setAttribute('aria-pressed', 'false');
@@ -140,7 +140,7 @@ export class PdfWorkspace {
     this.notesBeforeCompare = false;
   }
   async export() {
-    if (this.draftDirty) { this.onError?.('Guardá primero la nota pendiente para incluirla en la exportación.'); return; }
+    if (this.draftDirty) { this.onError?.('Guarda primero la nota pendiente para incluirla en la exportación.'); return; }
     try { const result = await this.api.exportNotebook({ path: this.doc.path, revision: this.doc.revision }); if (result) this.onStatus?.('Fichas exportadas a Markdown'); } catch (error) { this.onError?.(error.message); }
   }
   find() { this.primary.focusSearch(); }

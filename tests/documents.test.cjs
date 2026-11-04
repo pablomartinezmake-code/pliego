@@ -15,7 +15,7 @@ test('mixed folder listing includes supported docs, reports metadata, and read i
   const file = new FileStore(path.join(root,'user')); const store = new DocumentStore(path.join(root,'user'),file,{mammoth:{}});
   const listed = await store.listFolder(docs); assert.deepEqual(listed.files.map(x=>x.type),['md','txt']); assert.equal(listed.truncated,false); assert.ok(listed.files[0].size > 0);
   assert.equal((await store.read(path.join(docs,'sub','b.txt'))).text,'B');
-  await assert.rejects(store.read(path.join(root,'nope.txt')),/Primero abrí/);
+  await assert.rejects(store.read(path.join(root,'nope.txt')),/Primero abre/);
 }));
 
 test('Markdown retains the existing text, eol, bom and revision contract', async () => fixture(async root => {

@@ -52,9 +52,9 @@ function buildMenu() {
     ] },
     { label: 'Editar', submenu: [{ role: 'undo' }, { role: 'redo' }, { type: 'separator' }, { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'selectAll' }, { type: 'separator' }, { label: 'Buscar', accelerator: 'CmdOrCtrl+F', click: () => sendCommand('find') }] },
     { label: 'Ver', submenu: [
-      { label: 'Lectura', accelerator: 'CmdOrCtrl+1', click: () => sendCommand('mode-read') },
-      { label: 'Dividido', accelerator: 'CmdOrCtrl+2', click: () => sendCommand('mode-split') },
-      { label: 'Edición', accelerator: 'CmdOrCtrl+3', click: () => sendCommand('mode-edit') },
+      { label: 'Leer', accelerator: 'CmdOrCtrl+1', click: () => sendCommand('mode-read') },
+      { label: 'Ambas (Markdown y vista previa)', accelerator: 'CmdOrCtrl+2', click: () => sendCommand('mode-split') },
+      { label: 'Editar', accelerator: 'CmdOrCtrl+3', click: () => sendCommand('mode-edit') },
       { type: 'separator' }, { role: 'toggleDevTools' }, { role: 'togglefullscreen' },
     ] },
   ];
@@ -63,7 +63,7 @@ function buildMenu() {
 function showError(error) { if (win) dialog.showMessageBox(win, { type: 'error', title: 'Pliego', message: error.message || String(error), buttons: ['Aceptar'] }); }
 function confirmClose() {
   if (!dirty) { allowClose = true; win.destroy(); return; }
-  dialog.showMessageBox(win, { type: 'warning', title: 'Cambios sin guardar', message: 'Hay cambios pendientes en los documentos abiertos. ¿Querés guardarlos antes de cerrar?', buttons: ['Guardar', 'Descartar', 'Cancelar'], defaultId: 0, cancelId: 2, noLink: true }).then(({ response }) => {
+  dialog.showMessageBox(win, { type: 'warning', title: 'Cambios sin guardar', message: 'Hay cambios pendientes en los documentos abiertos. ¿Quieres guardarlos antes de cerrar?', buttons: ['Guardar', 'Descartar', 'Cancelar'], defaultId: 0, cancelId: 2, noLink: true }).then(({ response }) => {
     if (response === 0) sendSaveClose();
     else if (response === 1) { pendingClose = false; dirty = false; allowClose = true; win.destroy(); }
   });
@@ -120,7 +120,7 @@ if (ownsInstance) app.whenReady().then(async () => {
   handle('pliego:get-initial-reference-document', () => { const doc = initialReferenceDocument; initialReferenceDocument = null; return doc; });
   handle('pliego:open-external', async url => {
     if (typeof url !== 'string' || !/^https?:\/\//i.test(url)) return false;
-    const { response } = await dialog.showMessageBox(win, { type: 'question', title: 'Abrir enlace externo', message: `¿Querés abrir este enlace en el navegador?\n${url}`, buttons: ['Abrir', 'Cancelar'], defaultId: 1, cancelId: 1, noLink: true });
+    const { response } = await dialog.showMessageBox(win, { type: 'question', title: 'Abrir enlace externo', message: `¿Quieres abrir este enlace en el navegador?\n${url}`, buttons: ['Abrir', 'Cancelar'], defaultId: 1, cancelId: 1, noLink: true });
     if (response !== 0) return false;
     await shell.openExternal(url); return true;
   });

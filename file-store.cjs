@@ -55,7 +55,7 @@ class FileStore {
         const rel = path.relative(root, absolute);
         return rel !== '' && !rel.startsWith('..') && !path.isAbsolute(rel);
       });
-      if (!fromRecent && !fromFolder) throw new Error('Primero abrí el archivo o seleccioná su carpeta desde Pliego.');
+      if (!fromRecent && !fromFolder) throw new Error('Primero abre el archivo o selecciona su carpeta desde Pliego.');
     }
     const st = await fsp.lstat(absolute);
     if (st.isSymbolicLink() || !st.isFile()) throw new Error('No se admiten enlaces simbólicos ni archivos especiales.');
@@ -103,7 +103,7 @@ class FileStore {
     if (saveAs || !target) return null; // main process must obtain a native Save dialog destination
     target = await this._validate(target, false);
     const current = await fsp.readFile(target);
-    if (hash(current) !== revision) throw new Error('El archivo cambió fuera de Pliego. No se guardó para evitar sobrescribir esos cambios; volvé a abrirlo y compará.');
+    if (hash(current) !== revision) throw new Error('El archivo cambió fuera de Pliego. No se guardó para evitar sobrescribir esos cambios; vuelve a abrirlo y compara.');
     const meta = decode(current, target);
     const unchanged = text === meta.text;
     const normalized = unchanged ? meta.text : text.replace(/\r\n|\r|\n/g, meta.eol || eolOf(meta.text));
@@ -130,9 +130,9 @@ class FileStore {
       const st = await fsp.lstat(absolute);
       if (st.isSymbolicLink() || !st.isFile()) throw new Error('No se puede guardar sobre un enlace o archivo especial.');
       // Existing files must be opened explicitly before Save As may replace them.
-      if (!this.authorized.has(folded(absolute))) throw new Error('Abrí primero el archivo existente antes de reemplazarlo.');
+      if (!this.authorized.has(folded(absolute))) throw new Error('Abre primero el archivo existente antes de reemplazarlo.');
       const doc = await this.read(absolute);
-      if (expectedRevision && doc.revision !== expectedRevision) throw new Error('El archivo cambió fuera de Pliego. No se guardó para evitar sobrescribir esos cambios; volvé a abrirlo y compará.');
+      if (expectedRevision && doc.revision !== expectedRevision) throw new Error('El archivo cambió fuera de Pliego. No se guardó para evitar sobrescribir esos cambios; vuelve a abrirlo y compara.');
       return this._saveUnlocked({ path: absolute, text, revision: doc.revision });
     } catch (e) { if (e.code !== 'ENOENT') throw e; }
     const tmp = path.join(path.dirname(absolute), `.${path.basename(absolute)}.${process.pid}.${crypto.randomBytes(6).toString('hex')}.tmp`);

@@ -46,7 +46,7 @@ test('keeps a recoverable previous-version backup before replacement', async t =
 test('blocks arbitrary paths and rejects invalid UTF-8 without replacement', async t => {
   const f = await fixture(); t.after(f.cleanup);
   const outside = path.join(f.root, 'ajeno.md'); await fs.writeFile(outside, 'privado');
-  await assert.rejects(f.store.read(outside), /Primero abrí/);
+  await assert.rejects(f.store.read(outside), /Primero abre/);
   const bad = path.join(f.root, 'malo.md'); await fs.writeFile(bad, Buffer.from([0xc3, 0x28]));
   await assert.rejects(f.store.open(bad), /UTF-8 válido/);
 });
@@ -70,7 +70,7 @@ test('asset URLs require an authorized Markdown document and stay inside its fol
   const href = await f.store.assetUrl(doc.path, 'cover image.png');
   assert.match(href, /^file:/);
   assert.equal(await f.store.assetUrl(doc.path, '../ajeno.png'), null);
-  await assert.rejects(f.store.assetUrl(path.join(f.root, 'ajeno.md'), 'x.png'), /Primero abrí/);
+  await assert.rejects(f.store.assetUrl(path.join(f.root, 'ajeno.md'), 'x.png'), /Primero abre/);
   assert.equal(await f.store.assetUrl(doc.path, 'cover%20image.png'), href);
   assert.equal(await f.store.assetUrl(doc.path, 'texto.md'), null);
 });

@@ -46,5 +46,5 @@ test('rejects malformed, out of bounds and non-finite rectangles', async () => f
 test('notebook access requires prior document authorization', async () => fixture(async root => {
   const user=path.join(root,'u'), pdf=path.join(root,'outside.pdf'), bytes=Buffer.from('%PDF'); await fs.writeFile(pdf,bytes);
   const docs=new DocumentStore(user,new FileStore(user),{mammoth:{}}), r=new ResearchStore(user,docs);
-  await assert.rejects(r.getNotebook({path:pdf,revision:hash(bytes)}),/Primero abrí/);
+  await assert.rejects(r.getNotebook({path:pdf,revision:hash(bytes)}),/Primero abre/);
 }));
